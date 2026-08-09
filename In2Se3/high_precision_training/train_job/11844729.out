@@ -1,0 +1,66 @@
+Sender: LSF System <lsfadmin@r08n34>
+Subject: Job 11844729: <high_precision_train> in cluster <sustchpc> Done
+
+Job <high_precision_train> was submitted from host <r01n24> by user <phy-wuyb> in cluster <sustchpc> at Fri Jun 12 11:29:11 2026.
+Job was executed on host(s) <40*r08n34>, in queue <short>, as user <phy-wuyb> in cluster <sustchpc> at Fri Jun 12 11:29:11 2026.
+</work/phy-wuyb> was used as the home directory.
+</scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/high_precision_training/train_job> was used as the working directory.
+Started at Fri Jun 12 11:29:11 2026.
+Terminated at Fri Jun 12 12:06:33 2026.
+Results reported at Fri Jun 12 12:06:33 2026.
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+
+#BSUB -J high_precision_train
+
+#BSUB -q short
+#BSUB -n 40
+#BSUB -R "span[ptile=40]"
+#BSUB -e %J.err
+#BSUB -o %J.out
+hostfile=`echo $LSB_DJOB_HOSTFILE`
+NP=`cat $hostfile | wc -l`
+cd $LS_SUBCWD
+source /work/phy-wuyb/softs/ocbf_one-button_deployment/activate.sh
+
+start_time=$(date +%s.%N)
+touch __start__
+COMMAND_std="mpirun /work/phy-wuyb/softs/ocbf_one-button_deployment/runtime/bin/mlp-sus2 train hyx.mtp ../train.cfg --stdd-weight=0.0 --std-weight=0.0000 --max-iter=3000 --curr-pot-name=/scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/high_precision_training/trained.mtp"
+$COMMAND_std > logout 2>&1
+touch __ok__
+end_time=$(date +%s.%N)
+runtime=$(echo "$end_time - $start_time" | bc)
+echo "total_runtime:$runtime s" >> time.txt
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   88841.80 sec.
+    Max Memory :                                 2686 MB
+    Average Memory :                             2676.14 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   764 MB
+    Max Processes :                              48
+    Max Threads :                                90
+    Run time :                                   2242 sec.
+    Turnaround time :                            2242 sec.
+
+The output (if any) follows:
+
+environment activated
+mode: bundled
+python: /work/phy-wuyb/softs/ocbf_one-button_deployment/runtime/ocbf_env/bin/python
+
+
+PS:
+
+Read file <11844729.err> for stderr output of this job.
+

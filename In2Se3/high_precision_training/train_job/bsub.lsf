@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#BSUB -J high_precision_train
+
+#BSUB -q short
+#BSUB -n 40
+#BSUB -R "span[ptile=40]"
+#BSUB -e %J.err
+#BSUB -o %J.out
+hostfile=`echo $LSB_DJOB_HOSTFILE`
+NP=`cat $hostfile | wc -l`
+cd $LS_SUBCWD
+source /work/phy-wuyb/softs/ocbf_one-button_deployment/activate.sh
+
+start_time=$(date +%s.%N)
+touch __start__
+COMMAND_std="mpirun /work/phy-wuyb/softs/ocbf_one-button_deployment/runtime/bin/mlp-sus2 train hyx.mtp ../train.cfg --stdd-weight=0.0 --std-weight=0.0000 --max-iter=3000 --curr-pot-name=/scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/high_precision_training/trained.mtp"
+$COMMAND_std > logout 2>&1
+touch __ok__
+end_time=$(date +%s.%N)
+runtime=$(echo "$end_time - $start_time" | bc)
+echo "total_runtime:$runtime s" >> time.txt

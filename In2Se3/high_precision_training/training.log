@@ -1,0 +1,10 @@
+2026-06-12 11:29:10,982 INFO: [training] input_xyz=/scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/all_sample_data.xyz
+2026-06-12 11:29:10,983 INFO: [training] elements=['Se', 'In']
+2026-06-12 11:29:10,983 INFO: [training] template_type=l2k3 template=/work/phy-wuyb/softs/ocbf_one-button_deployment/runtime/ocbf_env/lib/python3.10/site-packages/ocbf/training_assets/l2k3.mtp
+2026-06-12 11:29:10,983 INFO: [training] rendered_template=/scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/high_precision_training/train_job/hyx.mtp
+2026-06-12 11:29:10,983 INFO: [training] species_count=2
+2026-06-12 11:29:10,984 INFO: [training] training_root=/scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/high_precision_training
+2026-06-12 11:29:10,984 INFO: [training] submitting job from /scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/high_precision_training/train_job
+2026-06-12 11:29:11,041 INFO: [training] waiting for training completion
+2026-06-12 12:06:41,867 INFO: [training] training completed
+2026-06-12 12:06:41,889 INFO: [training] prediction command=['/work/phy-wuyb/softs/ocbf_one-button_deployment/runtime/ocbf_env/bin/python', '-m', 'ocbf.high_precision_tools', 'predict', '/scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/all_sample_data.xyz', '--calc_type', 'sus2', '--model', '/scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/high_precision_training/trained.mtp', '--device', 'short', '--output', '/scratch/2026-06-08/phy-wuyb/TMDCs/InSe/MLIP-04/workspace/high_precision_training/prediction', '--format', 'extxyz', '--suffix', 'pred', '--num-workers', '1', '--chunksize', '1', '--log-level', 'INFO', '--ele_list', 'Se', 'In']
