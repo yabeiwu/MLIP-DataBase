@@ -1,0 +1,20 @@
+#!/bin/bash
+#BSUB -q short
+#BSUB -n 80
+#BSUB -J T773_seed606922_aniso
+#BSUB -e %J.err
+#BSUB -o %J.out
+#BSUB -R "span[ptile=40]"
+
+set -euo pipefail
+
+hostfile=`echo $LSB_DJOB_HOSTFILE`
+NP=`cat $hostfile | wc -l`
+
+source /work/phy-wuyb/softs/ocbf_one-button_deployment/activate.sh
+COMMAND_0="mpirun -np $NP /work/phy-wuyb/softs/ocbf_one-button_deployment/runtime/bin/lmp_mpi"
+COMMAND="${COMMAND_0} -in lmp.in"
+
+# Required inputs in the working directory:
+#   data.in  lmp.in  trained.mtp
+$COMMAND > lmp.out 2>&1
