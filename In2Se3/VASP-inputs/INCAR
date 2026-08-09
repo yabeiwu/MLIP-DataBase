@@ -1,0 +1,34 @@
+#general settings
+SYSTEM = SrTiO3
+ISMEAR = 0
+SIGMA = 0.02
+#NBANDS = 80
+EDIFF = 1.e-7
+PREC = Accurate
+ENCUT = 500
+ISTART = 0
+ICHARG = 2
+#ISPIN = 2
+#LASPH = .TRUE.
+#ADDGRID = .TRUE.
+LCHARG = .FALSE.
+LWAVE = .FALSE.
+ALGO = Normal
+#IALGO = 48
+#ISYM = 0
+KSPACING = 0.25
+LSCALAPACK=.FALSE.
+NELM = 200
+LREAL = Auto
+
+#ionic relaxtion
+#NSW = 200
+#ISIF = 2
+IBRION = 2
+EDIFFG = -0.002
+
+#GGA = PS
+
+# DFT-D3 vdw settings
+GGA = PE
+IVDW = 12
