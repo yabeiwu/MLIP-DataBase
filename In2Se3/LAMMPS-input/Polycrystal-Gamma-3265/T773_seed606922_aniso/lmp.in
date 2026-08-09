@@ -1,0 +1,82 @@
+# Independent isothermal NPT run for random-orientation gamma-In2Se3.
+# This template is converted into each case directory's lmp.in by
+# prepare_on_taiyi.sh. The @...@ placeholders must not remain at runtime.
+
+variable T equal 773
+variable seed equal 606922
+variable cellmode string aniso
+variable case string T773_seed606922_aniso
+
+variable dt equal 0.001
+variable EquilSteps equal 200000
+variable ProdSteps equal 2000000
+variable thermo_every equal 1000
+variable dump_every equal 5000
+variable restart_every equal 250000
+variable Ptarget equal 0.0
+
+units metal
+boundary p p p
+atom_style atomic
+
+box tilt large
+read_data data.in
+
+pair_style sus2mtp trained.mtp
+pair_coeff * *
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep ${dt}
+variable Tdamp equal v_dt*100
+variable Pdamp equal v_dt*1000
+
+thermo ${thermo_every}
+thermo_style custom step temp press pxx pyy pzz pxy pxz pyz pe ke etotal vol density lx ly lz xy xz yz
+thermo_modify flush yes
+
+velocity all create ${T} ${seed} mom yes rot yes dist gaussian
+velocity all zero linear
+
+print "===== Equilibrating ${case}: T=${T} K, cellmode=${cellmode}, seed=${seed} ====="
+fix eq all npt temp ${T} ${T} ${Tdamp} ${cellmode} ${Ptarget} ${Ptarget} ${Pdamp} nreset 1000
+run ${EquilSteps}
+unfix eq
+
+reset_timestep 0
+compute peatom all pe/atom
+
+variable T_inst equal temp
+variable P_inst equal press
+variable PE_inst equal pe
+variable KE_inst equal ke
+variable Etot_inst equal etotal
+variable Vol_inst equal vol
+variable Lx_inst equal lx
+variable Ly_inst equal ly
+variable Lz_inst equal lz
+variable XY_inst equal xy
+variable XZ_inst equal xz
+variable YZ_inst equal yz
+
+fix thermoavg all ave/time ${thermo_every} 1 ${thermo_every} v_T_inst v_P_inst v_PE_inst v_KE_inst v_Etot_inst v_Vol_inst v_Lx_inst v_Ly_inst v_Lz_inst v_XY_inst v_XZ_inst v_YZ_inst file thermo.${case}.dat mode scalar
+fix md all npt temp ${T} ${T} ${Tdamp} ${cellmode} ${Ptarget} ${Ptarget} ${Pdamp} nreset 1000
+
+dump traj all custom ${dump_every} dump.${case}.lammpstrj id type x y z fx fy fz c_peatom
+dump_modify traj sort id
+
+restart ${restart_every} restart.${case}.*.bin
+
+print "===== Production ${case}: 2 ns at ${T} K ====="
+run ${ProdSteps}
+
+write_data final.${case}.data
+write_restart final.${case}.restart
+write_dump all custom final.${case}.dump id type x y z modify sort id
+
+undump traj
+unfix md
+unfix thermoavg
+
+print "===== Finished ${case} ====="
